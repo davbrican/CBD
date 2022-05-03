@@ -31,5 +31,9 @@ router.get('/film/genre', (req, res) => {
     filmService.getByGenre(req, res);
 });
 
+router.get('/film/:film', (req, res) => {
+    filmService.getByTitle(req, res);
+});
+
 
 module.exports = router;
