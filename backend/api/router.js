@@ -7,7 +7,7 @@ const filmService = require('./services/film');
 const verifyUser = require('./middlewares/verifyUser');
 
 
-router.get('/user/login', (req, res) => {
+router.post('/user/login', (req, res) => {
     userService.login(req, res);
 });
 

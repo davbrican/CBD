@@ -1,5 +1,6 @@
 const client = require('../../database.js').connection();
 const dotenv = require("dotenv")
+const bcrypt = require('bcrypt');
 
 dotenv.config({ path: process.cwd() + './../.env' })
 

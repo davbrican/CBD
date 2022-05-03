@@ -1,16 +1,33 @@
 <template>
   <div id="Pelicula" >
-    <div class="menu">
-      MENU
-    </div>
+     
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand" href="/">Inicio</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
 
-    <br>
-    <br>
-    
-    <div class="column1">
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+                <li v-if="!user" class="nav-item">
+                    <a class="nav-link" href="/login">Iniciar Sesión</a>
+                </li>
+                <li v-if="user" class="nav-item">
+                    <a class="nav-link" href="/perfil">Perfil</a>
+                </li>
+                <li v-if="user" class="nav-item">
+                    <a @click="logout" class="nav-link" href="/">Cerrar Sesion</a>
+                </li>
+            </ul>
+            <input class="form-control mr-sm-1" type="search" placeholder="Search" aria-label="Search">
+            <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Buscar</button>
+        </div>
+    </nav>
+
+    <div class="column3">
         <img class="imagenPortada" v-bind:src="imagen" alt="" />
     </div>
-    <div class="column2">
+    <div class="column4">
         <h1>{{titulo}}</h1>
         <p><strong>Géneros:</strong> {{generos}}</p>
         <br>
@@ -31,9 +48,6 @@
         <br>
         <p><strong>Descripción:</strong><br>{{descripcion}}</p>
     </div>
-    <div style="margin-top: 500px; background-color: white;">
-      --------------------------
-    </div>
 
   </div>
 </template>
@@ -43,6 +57,7 @@ import Vue from 'vue'
 import Vuetify from 'vuetify'
 import 'vuetify/dist/vuetify.min.css'
 Vue.use(Vuetify)
+import axios from 'axios'
 
 export default {
   data() {
@@ -57,7 +72,12 @@ export default {
     }
   },
   methods: {
-    
+    obetenerPelicula(titulo) {
+      axios.get(`${process.env.BACK_URL}` + titulo)
+    },
+    logout() {
+        localStorage.removeItem('user');
+    }
   },
   mounted() {
     
@@ -70,17 +90,15 @@ export default {
   box-sizing: border-box;
 }
 
-.column1 {
+.column3 {
   float: left;
   width: 30%;
   padding: 10px;
-  background-color: #13a0ad;
 }
-.column2 {
+.column4 {
   float: left;
   width: 70%;
   padding: 10px;
-  background-color: #13a0ad;
 }
 
 .row:after {
