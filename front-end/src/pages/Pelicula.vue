@@ -6,10 +6,11 @@
 
     <br>
     <br>
-    <div class="img">
+    
+    <div class="column1">
         <img class="imagenPortada" v-bind:src="imagen" alt="" />
     </div>
-    <div class="main">
+    <div class="column2">
         <h1>{{titulo}}</h1>
         <p><strong>Géneros:</strong> {{generos}}</p>
         <br>
@@ -65,38 +66,31 @@ export default {
 </script>
 
 <style>
-.img {
+* {
+  box-sizing: border-box;
+}
+
+.column1 {
   float: left;
-  margin-left: 25px;
-  margin-top: 10px;;
-  width: 20%;
-  text-align: center;
+  width: 30%;
+  padding: 10px;
+  background-color: #13a0ad;
 }
-
-.main {
+.column2 {
   float: left;
-  width: 60%;
-  padding: 0 50px;
+  width: 70%;
+  padding: 10px;
+  background-color: #13a0ad;
 }
 
-@media only screen and (max-width: 620px) {
-  /* For mobile phones: */
-  .menu, .main, .right {
-    width: 100%;
-  }
+.row:after {
+  content: "";
+  display: table;
+  clear: both;
 }
-
 img {
   width: 80%;
 }
 
-.menu {
-  size: 40px;
-  width: 150%;
-  overflow: hidden;
-  margin-top: -10px;
-  margin-left: -50px;
-  background-color: rgba(48, 148, 115, 0.74);
-}
 
 </style>
