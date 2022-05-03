@@ -1,7 +1,6 @@
 import Pelicula from "./pages/Pelicula";
 import Registro from "./pages/Registro";
 import Login from "./pages/Login";
-import Peliculas from "./pages/Peliculas";
 import Inicio from "./pages/Inicio";
 
 const routes = [
@@ -10,12 +9,6 @@ const routes = [
         component: Inicio,
         name: "Inicio",
         meta: { title: "Inicio" },
-    },
-    {     
-        path: "/contenido",
-        component: Peliculas,
-        name: "Peliculas",
-        meta: { title: "Peliculas / Series" },
     },
     {     
         path: "/contenido/:titulo",

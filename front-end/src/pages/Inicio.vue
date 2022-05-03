@@ -22,6 +22,17 @@
             <button @click="buscarPelicula" class="btn btn-outline-success my-2 my-sm-0" type="submit">Buscar</button>
         </div>
     </nav>
+
+    <h1>PELICULAS BUSCADAS POR LOS USUARIOS</h1>
+
+    <div class="allFilms" v-for="(pelicula, index) in peliculas" :key="index">
+        <div class="column1">
+            <a style="color: blue;text-decoration: underline blue; cursor: pointer;" @click="redirectFilm(pelicula.Title)"><img class="imagenPortada" v-bind:src="pelicula.Poster" alt="" /></a>
+            <h1>{{pelicula.Title}}</h1>
+            <p>{{pelicula.Genre}}</p>
+        </div>
+    </div>
+
   </div>
 </template>
 
@@ -30,30 +41,68 @@ import Vue from 'vue'
 import Vuetify from 'vuetify'
 import 'vuetify/dist/vuetify.min.css'
 Vue.use(Vuetify)
-//import axios from 'axios'
+import axios from 'axios'
 
 export default {
   data() {
     return {
+        peliculas: [],
         busqueda: "",
         user: localStorage.user,
         vuetify: new Vuetify()
     }
   },
   methods: {
-      buscarPelicula() {
-          console.log(this.busqueda);
-      },
-      logout() {
-          localStorage.removeItem('user');
-      }
+    redirectFilm(title) {
+        window.location.href = `/contenido/${title}`;
+    },
+    obetenerPeliculas() {
+        axios.get(`${process.env.VUE_APP_BACK_URL}/api/v1/film/all`)
+        .then(response => {
+            if (response.status == 200) {
+                this.peliculas = response.data;
+                console.log(this.peliculas);
+            }
+            console.log(response);
+        }).catch(error => {
+            console.log(error);
+        });
+    },
+    buscarPelicula() {
+        console.log(this.busqueda);
+    },
+    logout() {
+        localStorage.removeItem('user');
+    }
   },
   mounted() {
-      
+      this.obetenerPeliculas();
   }
 };
 </script>
 
 <style>
+* {
+  box-sizing: border-box;
+}
 
+.column1 {
+  float: left;
+  width: 20%;
+  padding: 10px;
+}
+.column2 {
+  float: left;
+  width: 70%;
+  padding: 10px;
+}
+
+.row:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+img {
+  width: 100%;
+}
 </style>
