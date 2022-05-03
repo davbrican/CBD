@@ -30,11 +30,8 @@
     <div class="column4">
         <h1>{{titulo}}</h1>
         <p><strong>Géneros:</strong> {{generos}}</p>
-        <br>
         <p><strong>Duración:</strong> {{duracion}}</p>
-        <br>
         <p><strong>Valoración media:</strong></p>
-        <br>
         <v-progress-circular
           :rotate="360"
           :size="50"
@@ -42,11 +39,12 @@
           :value="valoracion"
           color="teal"
         >
-          {{ valoracion }}%
+          {{ (valoracion/10) }}
         </v-progress-circular>
         <br>
         <br>
         <p><strong>Descripción:</strong><br>{{descripcion}}</p>
+        <p><strong>Actores:</strong><br>{{actores}}</p>
     </div>
 
   </div>
@@ -62,16 +60,35 @@ import axios from 'axios'
 export default {
   data() {
     return {
-        titulo: `One Piece`,
-        descripcion: `Riqueza, fama, poder... un hombre había obtenido todo en este mundo, era el Rey de los Piratas Gold Roger. Antes de morir sus últimas palabras inspiraron al mundo a aventurarse al mar: "¿Mi tesoro? Si lo queréis es vuestro... lo he escondido todo en ese lugar". Y así dio comienzo lo que se conoce como la Gran Era de la Piratería, lanzando a cientos de piratas al mar para encontrar el gran tesoro One Piece. Esta serie relata las aventuras y desventuras de uno de esos piratas, Monkey D. Luffy, quien accidentalmente de pequeño, comió una Fruta del Diablo (Akuma no Mi en japonés), en particular una Gomu Gomu no Mi que hizo que su cuerpo ganara las propiedades físicas de la goma, convirtiéndose en el hombre de goma. Luffy, después de dicho suceso, decide que se convertirá en el próximo Rey de los Piratas y para ello, deberá encontrar el "One Piece".`,
-        imagen: "https://www.themoviedb.org/t/p/w300_and_h450_bestv2/goKUd5y4lHU3qkW0XKKxmNSNcem.jpg",
-        valoracion: 88,
-        generos: `Action & Adventure, Comedia, Animación`,
-        duracion: `24m`,
+      user: localStorage.user,
+        titulo: ``,
+        descripcion: ``,
+        imagen: ``,
+        valoracion: 0,
+        generos: ``,
+        duracion: ``,
+        actores: [],
         vuetify: new Vuetify()
     }
   },
   methods: {
+    test() {
+      var titulo = window.location.href.split("/")[4].replace(/%20/g, " ");
+      axios.get(`${process.env.VUE_APP_BACK_URL}/api/v1/film/${titulo}`)
+      .then(response => {
+        console.log(response.data);
+        this.titulo = response.data.Title;
+        this.generos = response.data.Genre;
+        this.duracion = response.data.Runtime;
+        this.imagen = response.data.Poster;
+        this.descripcion = response.data.Plot;
+        this.valoracion = response.data.imdbRating*10;
+        this.actores = response.data.Actors;
+      })
+      .catch(error => {
+        console.log(error);
+      });
+    },
     obetenerPelicula(titulo) {
       axios.get(`${process.env.BACK_URL}` + titulo)
     },
@@ -80,7 +97,7 @@ export default {
     }
   },
   mounted() {
-    
+    this.test();
   }
 };
 </script>
