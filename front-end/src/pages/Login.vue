@@ -63,8 +63,8 @@ export default {
       })
       .then(function (response) {
         if (response.status == 200) {
-            localStorage.setItem('user', response.data.user);
-            window.location.href = '/';
+          localStorage.setItem('user', JSON.stringify(response.data.user));
+          window.location.href = '/';
         }
         console.log(response);
       })

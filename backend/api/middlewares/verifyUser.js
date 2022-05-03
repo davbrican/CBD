@@ -10,7 +10,7 @@ module.exports = (req, res, next) => {
         res.status(401).send({ message: 'No credentials provided' })
     }
     else {
-        const user = JSON.parse(credentials)
+        const user = JSON.parse(credentials);
         client.connect().then(() => {
             client.db("cbd").collection("users").findOne({ 'email': user.email }).then((result) => {
                 if (result === null) {
@@ -26,7 +26,7 @@ module.exports = (req, res, next) => {
                             });
                         } else {
                             if (result2) {
-                                req.verifiedUserID = user.id;
+                                req.verifiedUserID = result._id;
                                 next();
                             } else {
                                 res.status(401).send({
@@ -36,6 +36,7 @@ module.exports = (req, res, next) => {
                         }
                     });
                 }
+
             }).catch(err => {
                 console.log(err)
                 res.status(500).send({

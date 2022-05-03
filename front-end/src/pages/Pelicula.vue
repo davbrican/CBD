@@ -28,7 +28,9 @@
         <img class="imagenPortada" v-bind:src="imagen" alt="" />
     </div>
     <div class="column4">
-        <h1>{{titulo}}</h1>
+      
+        <h1>{{titulo}} <button @click="guardarContenido" v-if="user && !userLikes"><img src="@/assets/emptyHeart.svg" style="width: 20px;" /></button><button @click="guardarContenido" v-if="user && userLikes"><img src="@/assets/filledHeart.svg" style="width: 20px;" /></button></h1>
+        
         <p><strong>Géneros:</strong> {{generos}}</p>
         <p><strong>Duración:</strong> {{duracion}}</p>
         <p><strong>Valoración media:</strong></p>
@@ -61,22 +63,38 @@ export default {
   data() {
     return {
       user: localStorage.user,
-        titulo: ``,
-        descripcion: ``,
-        imagen: ``,
-        valoracion: 0,
-        generos: ``,
-        duracion: ``,
-        actores: [],
-        vuetify: new Vuetify()
+      userLikes: false,
+      titulo: ``,
+      descripcion: ``,
+      imagen: ``,
+      valoracion: 0,
+      generos: ``,
+      duracion: ``,
+      actores: [],
+      vuetify: new Vuetify()
     }
   },
   methods: {
-    test() {
+    guardarContenido() {
+      console.log(this.user);
+      this.userLikes = !this.userLikes;
+      axios.post(`${process.env.VUE_APP_BACK_URL}/api/v1/user/films`, {
+        film: this.titulo
+      }, 
+      {
+        headers: {
+          "x-access-token": localStorage.user
+        }
+      }).then(response => {
+        console.log(response);
+      }).catch((err) => {
+        console.log(err);
+      });
+    },
+    obetenerPelicula() {
       var titulo = window.location.href.split("/")[4].replace(/%20/g, " ");
       axios.get(`${process.env.VUE_APP_BACK_URL}/api/v1/film/${titulo}`)
       .then(response => {
-        console.log(response.data);
         this.titulo = response.data.Title;
         this.generos = response.data.Genre;
         this.duracion = response.data.Runtime;
@@ -89,15 +107,12 @@ export default {
         console.log(error);
       });
     },
-    obetenerPelicula(titulo) {
-      axios.get(`${process.env.BACK_URL}` + titulo)
-    },
     logout() {
         localStorage.removeItem('user');
     }
   },
   mounted() {
-    this.test();
+    this.obetenerPelicula();
   }
 };
 </script>
