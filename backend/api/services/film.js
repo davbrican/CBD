@@ -44,3 +44,30 @@ module.exports.getByGenre = (req, res) => {
     }
     );
 }
+
+module.exports.getByTitle = (req, res) => {
+    const title = req.params.film;
+    client.connect().then(() => {
+        client.db("cbd").collection("films").findOne({"Title" : title}).then((result) => {
+            if(result){
+                res.status(200).send(result);
+            } else {
+                res.status(404).send({
+                    message: 'Film not found'
+                });
+            }
+        }).catch(err => {
+            console.log(err)
+            res.status(500).send({
+                message: 'Internal server error'
+            });
+        }
+        );
+    }).catch(err => {
+        console.log(err)
+        res.status(500).send({
+            message: 'Error connecting to database'
+        });
+    }
+    );
+}
