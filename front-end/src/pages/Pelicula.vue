@@ -31,7 +31,11 @@
       
         <h1>{{titulo}} <button @click="guardarContenido" v-if="user && !userLikes"><img src="@/assets/emptyHeart.svg" style="width: 20px;" /></button><button @click="guardarContenido" v-if="user && userLikes"><img src="@/assets/filledHeart.svg" style="width: 20px;" /></button></h1>
         
-        <p><strong>Géneros:</strong> {{generos}}</p>
+        <strong>Géneros:</strong> 
+        <div v-for="genero in generos.split(',')" :key="genero">
+          <a style="color: blue;text-decoration: underline blue; cursor: pointer;" @click="redirectGenre(genero)">{{genero}}</a>
+        </div>
+        <br>
         <p><strong>Duración:</strong> {{duracion}}</p>
         <p><strong>Valoración media:</strong></p>
         <v-progress-circular
@@ -76,7 +80,6 @@ export default {
   },
   methods: {
     guardarContenido() {
-      console.log(this.user);
       this.userLikes = !this.userLikes;
       axios.post(`${process.env.VUE_APP_BACK_URL}/api/v1/user/films`, {
         film: this.titulo
@@ -109,6 +112,10 @@ export default {
     },
     logout() {
         localStorage.removeItem('user');
+    },
+    redirectGenre(genre) {
+      if (genre[0] == " ") genre = genre.substring(1, genre.length);
+      window.location.href = `/contenido/genero/${genre}`;
     }
   },
   mounted() {

@@ -2,6 +2,7 @@ import Pelicula from "./pages/Pelicula";
 import Registro from "./pages/Registro";
 import Login from "./pages/Login";
 import Inicio from "./pages/Inicio";
+import PeliculasGenero from "./pages/PeliculasGenero";
 
 const routes = [
     {     
@@ -15,6 +16,12 @@ const routes = [
         component: Pelicula,
         name: "Pelicula",
         meta: { title: "Pelicula / Serie" },
+    },
+    {     
+        path: "/contenido/genero/:tipo",
+        component: PeliculasGenero,
+        name: "PeliculasGenero",
+        meta: { title: "Peliculas / Series" },
     },
     {     
         path: "/registro",
