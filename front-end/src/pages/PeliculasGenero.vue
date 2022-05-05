@@ -57,9 +57,7 @@ export default {
     },
     obetenerPeliculas() {
         var genero = window.location.href.split("/")[5];
-        axios.post(`${process.env.VUE_APP_BACK_URL}/api/v1/film/genre`, {
-            genre: genero
-        })
+        axios.get(`${process.env.VUE_APP_BACK_URL}/api/v1/film/genre?genre=${genero}`)
         .then(response => {
             if (response.status == 200) {
                 this.peliculas = response.data;

@@ -25,7 +25,7 @@ module.exports.getAll = (req, res) => {
 }
 
 module.exports.getByGenre = (req, res) => {
-    const genre = req.body.genre;
+    const genre = req.query.genre;
     client.connect().then(() => {
         client.db("cbd").collection("films").find({"Genre" : new RegExp(escapeRegExp(genre), 'i')}).toArray().then((result) => {
             res.send(result);

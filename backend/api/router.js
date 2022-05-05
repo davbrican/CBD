@@ -27,7 +27,7 @@ router.get('/film/all', (req, res) => {
     filmService.getAll(req, res);
 });
 
-router.post('/film/genre', (req, res) => {
+router.get('/film/genre', (req, res) => {
     filmService.getByGenre(req, res);
 });
 
