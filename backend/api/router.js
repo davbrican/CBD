@@ -15,7 +15,7 @@ router.post('/user/signup', (req, res) => {
     userService.signup(req, res);
 });
 
-router.get('/user/films', verifyUser, (req, res) => {
+router.get('/user/films', (req, res) => {
     userService.getFilms(req, res);
 });
 

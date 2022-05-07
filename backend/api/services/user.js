@@ -142,18 +142,21 @@ module.exports.signup = async function signup(req, res) {
 };
 
 module.exports.getFilms = async function getFilms(req, res) {
-    if(!verifyUser(req)){
+    if (false) {
         res.status(401).json({
             message: 'No credentials provided.'
         });
     } else {
-        const userId = req.verifiedUserID;
+        const userId = '6271558b57553e2bfa2bc070';
 
         client.connect().then(() => {
-            client.db("cbd").collection("users").findOne({ '_id': ObjectId(userId) }).then((result) => {
+            client.db("cbd").collection("users").aggregate([
+                { $match: { films: "One Piece" } },
+                { $group: { _id: "$email"} }
+            ]).then((result) => {
                 if (result) {
                     res.status(200).send({
-                        films: result.films
+                        films: result
                     });
                 } else {
                     res.status(409).send({
@@ -176,63 +179,56 @@ module.exports.getFilms = async function getFilms(req, res) {
 }
 
 module.exports.saveFilm = async function saveFilm(req, res) {
-    if(false){
-        res.status(401).json({
-            message: 'No credentials provided.'
-        });
-    } else {
-        const userId = req.verifiedUserID;
-        const film = req.body.film;
+    const film = req.body.film;
 
-        //Collect film data
-        // axios.get(`https://www.omdbapi.com/?apikey=${process.env.OMDB_API_KEY}&t=${film}`).then(response => {
+    //Collect film data
+    // axios.get(`https://www.omdbapi.com/?apikey=${process.env.OMDB_API_KEY}&t=${film}`).then(response => {
 
-        client.connect().then(() => {
-            client.db("cbd").collection("films").findOne({ 'Title': film }).then((result) => {
-                if (result) {
-                    res.status(200).send({
-                        film: film,
-                        message: 'Film already saved'
-                    });
-                } else {
-                    //Collect film data
-                    axios.get(`https://www.omdbapi.com/?apikey=${process.env.OMDB_API_KEY}&t=${film}`).then(response => {
-                        const filmData = response.data;
-                        if(filmData.Response === 'False'){
-                            res.status(404).send({
-                                message: 'Film not found'
-                            });
-                        } else {
-                            client.db("cbd").collection("films").insertOne(filmData).then((result) => {
-                                res.status(200).send({
-                                    film: filmData,
-                                    message: 'Film saved'
-                                });
-                            }).catch(err => {
-                                console.log(err)
-                                res.status(500).send({
-                                    message: 'Error saving film'
-                                });
-                            });
-                        }
-                    }).catch(err => {
-                        console.log(err)
-                        res.status(500).send({
-                            message: 'Error saving film'
-                        });
-                    });
-                };
-            }).catch(err => {
-                console.log(err)
-                res.status(500).send({
-                    message: 'Error saving film'
+    client.connect().then(() => {
+        client.db("cbd").collection("films").findOne({ 'Title': film }).then((result) => {
+            if (result) {
+                res.status(200).send({
+                    film: film,
+                    message: 'Film already saved'
                 });
-            });
+            } else {
+                //Collect film data
+                axios.get(`https://www.omdbapi.com/?apikey=${process.env.OMDB_API_KEY}&t=${film}`).then(response => {
+                    const filmData = response.data;
+                    if (filmData.Response === 'False') {
+                        res.status(404).send({
+                            message: 'Film not found'
+                        });
+                    } else {
+                        client.db("cbd").collection("films").insertOne(filmData).then((result) => {
+                            res.status(200).send({
+                                film: filmData,
+                                message: 'Film saved'
+                            });
+                        }).catch(err => {
+                            console.log(err)
+                            res.status(500).send({
+                                message: 'Error saving film'
+                            });
+                        });
+                    }
+                }).catch(err => {
+                    console.log(err)
+                    res.status(500).send({
+                        message: 'Error saving film'
+                    });
+                });
+            };
         }).catch(err => {
             console.log(err)
             res.status(500).send({
-                message: 'Error connecting to database'
+                message: 'Error saving film'
             });
         });
-    }
+    }).catch(err => {
+        console.log(err)
+        res.status(500).send({
+            message: 'Error connecting to database'
+        });
+    });
 }
