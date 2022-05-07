@@ -107,6 +107,7 @@ export default {
       axios.get(`${process.env.VUE_APP_BACK_URL}/api/v1/user/films`, {headers: {
         "x-access-token": localStorage.user
       }}).then(response => {
+        console.log(response);
         var lista = response.data.films[0].films;
         for (let i = 0; i < lista.length; i++) {
           const element = lista[i];
@@ -157,7 +158,7 @@ export default {
     }
   },
   mounted() {
-    this.obetenerPelicula();
+    this.start();
   }
 };
 </script>

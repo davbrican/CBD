@@ -23,7 +23,7 @@ router.post('/user/films', (req, res) => {
     userService.saveFilm(req, res);
 });
 
-router.post('/user/favFilms', (req, res) => {
+router.post('/user/favFilms',verifyUser, (req, res) => {
     userService.saveFilmInFavs(req, res);
 });
 

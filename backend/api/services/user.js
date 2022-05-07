@@ -244,7 +244,6 @@ module.exports.saveFilmInFavs = async function saveFilmInFavs(req, res) {
     } else {
         const userId = req.verifiedUserID;
         const film = req.body.film;
-        console.log(film);
 
         //Collect film data
         // axios.get(`https://www.omdbapi.com/?apikey=${process.env.OMDB_API_KEY}&t=${film}`).then(response => {
@@ -252,18 +251,29 @@ module.exports.saveFilmInFavs = async function saveFilmInFavs(req, res) {
         client.connect().then(() => {
             client.db("cbd").collection("users").findOne({ '_id': ObjectId(userId) }).then((result) => {
                 if (result) {
-                    console.log(result);
-                    /*client.db("cbd").collection("users").updateOne({ '_id': ObjectId(userId) }, { $push: { films: film } }).then((result) => {
-                        res.status(200).send({
-                            message: 'Film saved'
+                    if (result.films.includes(film)) {
+                        client.db("cbd").collection("users").updateOne({ '_id': ObjectId(userId) }, { $pull: { films: film } }).then((result) => {
+                            res.status(200).send({
+                                message: 'Film deleted from favs'
+                            });
+                        }).catch(err => {
+                            console.log(err)
+                            res.status(500).send({
+                                message: 'Error saving film in favs'
+                            });
                         });
-                    }).catch(err => {
-                        console.log(err)
-                        res.status(500).send({
-                            message: 'Error saving film'
+                    } else {
+                        client.db("cbd").collection("users").updateOne({ '_id': ObjectId(userId) }, { $push: { films: film } }).then((result) => {
+                            res.status(200).send({
+                                message: 'Film saved in favs'
+                            });
+                        }).catch(err => {
+                            console.log(err)
+                            res.status(500).send({
+                                message: 'Error saving film in favs'
+                            });
                         });
-                    });
-                    */
+                    }
                 } else {
                     res.status(409).send({
                         message: 'Error saving film'
