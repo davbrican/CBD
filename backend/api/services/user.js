@@ -1,6 +1,7 @@
 const client = require('../../database.js').connection();
 const bcrypt = require('bcrypt');
 const ObjectId = require('mongodb').ObjectId;
+const axios = require('axios');
 
 function verifyEmail(email) {
     var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
@@ -175,7 +176,7 @@ module.exports.getFilms = async function getFilms(req, res) {
 }
 
 module.exports.saveFilm = async function saveFilm(req, res) {
-    if(!verifyUser(req)){
+    if(false){
         res.status(401).json({
             message: 'No credentials provided.'
         });
@@ -187,21 +188,38 @@ module.exports.saveFilm = async function saveFilm(req, res) {
         // axios.get(`https://www.omdbapi.com/?apikey=${process.env.OMDB_API_KEY}&t=${film}`).then(response => {
 
         client.connect().then(() => {
-            client.db("cbd").collection("users").findOne({ '_id': ObjectId(userId) }).then((result) => {
+            client.db("cbd").collection("films").findOne({ 'Title': film }).then((result) => {
                 if (result) {
-                    client.db("cbd").collection("users").updateOne({ '_id': ObjectId(userId) }, { $push: { films: film } }).then((result) => {
-                        res.status(200).send({
-                            message: 'Film saved'
-                        });
+                    res.status(200).send({
+                        film: film,
+                        message: 'Film already saved'
+                    });
+                } else {
+                    //Collect film data
+                    axios.get(`https://www.omdbapi.com/?apikey=${process.env.OMDB_API_KEY}&t=${film}`).then(response => {
+                        const filmData = response.data;
+                        if(filmData.Response === 'False'){
+                            res.status(404).send({
+                                message: 'Film not found'
+                            });
+                        } else {
+                            client.db("cbd").collection("films").insertOne(filmData).then((result) => {
+                                res.status(200).send({
+                                    film: filmData,
+                                    message: 'Film saved'
+                                });
+                            }).catch(err => {
+                                console.log(err)
+                                res.status(500).send({
+                                    message: 'Error saving film'
+                                });
+                            });
+                        }
                     }).catch(err => {
                         console.log(err)
                         res.status(500).send({
                             message: 'Error saving film'
                         });
-                    });
-                } else {
-                    res.status(409).send({
-                        message: 'Error saving film'
                     });
                 };
             }).catch(err => {

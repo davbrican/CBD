@@ -19,7 +19,7 @@ router.get('/user/films', verifyUser, (req, res) => {
     userService.getFilms(req, res);
 });
 
-router.post('/user/films', verifyUser, (req, res) => {
+router.post('/user/films', (req, res) => {
     userService.saveFilm(req, res);
 });
 
