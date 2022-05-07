@@ -3,6 +3,7 @@ import Registro from "./pages/Registro";
 import Login from "./pages/Login";
 import Inicio from "./pages/Inicio";
 import PeliculasGenero from "./pages/PeliculasGenero";
+import Perfil from "./pages/Perfil";
 
 const routes = [
     {     
@@ -10,6 +11,12 @@ const routes = [
         component: Inicio,
         name: "Inicio",
         meta: { title: "Inicio" },
+    },
+    {     
+        path: "/perfil",
+        component: Perfil,
+        name: "Perfil",
+        meta: { title: "Perfil" },
     },
     {     
         path: "/contenido/:titulo",

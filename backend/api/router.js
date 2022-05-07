@@ -23,6 +23,10 @@ router.post('/user/films', (req, res) => {
     userService.saveFilm(req, res);
 });
 
+router.post('/user/favFilms', (req, res) => {
+    userService.saveFilmInFavs(req, res);
+});
+
 router.get('/film/all', (req, res) => {
     filmService.getAll(req, res);
 });

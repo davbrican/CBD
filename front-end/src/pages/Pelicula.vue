@@ -81,6 +81,7 @@ export default {
       actores: [],
       vuetify: new Vuetify(),
       notFound: false,
+      likedFilms: [],
     }
   },
   methods: {
@@ -89,7 +90,7 @@ export default {
     },
     guardarContenido() {
       this.userLikes = !this.userLikes;
-      axios.post(`${process.env.VUE_APP_BACK_URL}/api/v1/user/films`, {
+      axios.post(`${process.env.VUE_APP_BACK_URL}/api/v1/user/favFilms`, {
         film: this.titulo
       }, 
       {
@@ -100,6 +101,21 @@ export default {
         console.log(response);
       }).catch((err) => {
         console.log(err);
+      });
+    },
+    start() {
+      axios.get(`${process.env.VUE_APP_BACK_URL}/api/v1/user/films`, {headers: {
+        "x-access-token": localStorage.user
+      }}).then(response => {
+        var lista = response.data.films[0].films;
+        for (let i = 0; i < lista.length; i++) {
+          const element = lista[i];
+          this.likedFilms.push(element.Title);
+        }
+        this.obetenerPelicula();
+      }).catch((err) => {
+        console.log(err);
+        this.obetenerPelicula();
       });
     },
     obetenerPelicula() {
@@ -122,6 +138,9 @@ export default {
           this.descripcion = response.data.Plot;
           this.valoracion = response.data.imdbRating*10;
           this.actores = response.data.Actors;
+        }
+        if (this.likedFilms.includes(this.titulo)) {
+          this.userLikes = true;
         }
       })
       .catch(error => {

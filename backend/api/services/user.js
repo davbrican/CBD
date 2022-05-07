@@ -234,3 +234,52 @@ module.exports.saveFilm = async function saveFilm(req, res) {
         });
     });
 }
+
+
+module.exports.saveFilmInFavs = async function saveFilmInFavs(req, res) {
+    if(!verifyUser(req)){
+        res.status(401).json({
+            message: 'No credentials provided.'
+        });
+    } else {
+        const userId = req.verifiedUserID;
+        const film = req.body.film;
+        console.log(film);
+
+        //Collect film data
+        // axios.get(`https://www.omdbapi.com/?apikey=${process.env.OMDB_API_KEY}&t=${film}`).then(response => {
+
+        client.connect().then(() => {
+            client.db("cbd").collection("users").findOne({ '_id': ObjectId(userId) }).then((result) => {
+                if (result) {
+                    console.log(result);
+                    /*client.db("cbd").collection("users").updateOne({ '_id': ObjectId(userId) }, { $push: { films: film } }).then((result) => {
+                        res.status(200).send({
+                            message: 'Film saved'
+                        });
+                    }).catch(err => {
+                        console.log(err)
+                        res.status(500).send({
+                            message: 'Error saving film'
+                        });
+                    });
+                    */
+                } else {
+                    res.status(409).send({
+                        message: 'Error saving film'
+                    });
+                };
+            }).catch(err => {
+                console.log(err)
+                res.status(500).send({
+                    message: 'Error saving film'
+                });
+            });
+        }).catch(err => {
+            console.log(err)
+            res.status(500).send({
+                message: 'Error connecting to database'
+            });
+        });
+    }
+}
