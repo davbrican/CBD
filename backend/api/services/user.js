@@ -142,7 +142,7 @@ module.exports.signup = async function signup(req, res) {
 };
 
 module.exports.getFilms = async function getFilms(req, res) {
-    if (false) {
+    if (!verifyUser(req)) {
         res.status(401).json({
             message: 'No credentials provided.'
         });
@@ -150,25 +150,27 @@ module.exports.getFilms = async function getFilms(req, res) {
         const userId = '6271558b57553e2bfa2bc070';
 
         client.connect().then(() => {
+            //join films and users by film title
             client.db("cbd").collection("users").aggregate([
-                { $match: { films: "One Piece" } },
-                { $group: { _id: "$email"} }
-            ]).then((result) => {
-                if (result) {
-                    res.status(200).send({
-                        films: result
-                    });
-                } else {
-                    res.status(409).send({
-                        message: 'Error getting user films'
-                    });
-                };
+                {
+                    $lookup: {
+                        from: "films",
+                        localField: "films",
+                        foreignField: "Title",
+                        as: "films"
+                    }
+                }
+            ]).toArray().then((result) => {
+                res.status(200).send({
+                    films: result
+                });
             }).catch(err => {
                 console.log(err)
                 res.status(500).send({
-                    message: 'Error getting user films'
+                    message: 'Error getting films'
                 });
-            });
+            }
+            );
         }).catch(err => {
             console.log(err)
             res.status(500).send({
