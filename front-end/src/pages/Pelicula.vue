@@ -19,15 +19,15 @@
                     <a @click="logout" class="nav-link" href="/">Cerrar Sesion</a>
                 </li>
             </ul>
-            <input class="form-control mr-sm-1" type="search" placeholder="Search" aria-label="Search">
-            <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Buscar</button>
+            <input v-model="busqueda" class="form-control mr-sm-1" type="search" placeholder="Search" aria-label="Search">
+            <button @click="buscarPelicula()" class="btn btn-outline-success my-2 my-sm-0" type="submit">Buscar</button>
         </div>
     </nav>
 
-    <div class="column3">
+    <div class="column3" v-if="!notFound">
         <img class="imagenPortada" v-bind:src="imagen" alt="" />
     </div>
-    <div class="column4">
+    <div class="column4" v-if="!notFound">
       
         <h1>{{titulo}} <button @click="guardarContenido" v-if="user && !userLikes"><img src="@/assets/emptyHeart.svg" style="width: 20px;" /></button><button @click="guardarContenido" v-if="user && userLikes"><img src="@/assets/filledHeart.svg" style="width: 20px;" /></button></h1>
         
@@ -53,6 +53,9 @@
         <p><strong>Actores:</strong><br>{{actores}}</p>
     </div>
 
+    <div v-if="notFound">
+      <h1>Pelicula no encontrada</h1>
+    </div>
   </div>
 </template>
 
@@ -66,6 +69,7 @@ import axios from 'axios'
 export default {
   data() {
     return {
+      busqueda: '',
       user: localStorage.user,
       userLikes: false,
       titulo: ``,
@@ -75,10 +79,14 @@ export default {
       generos: ``,
       duracion: ``,
       actores: [],
-      vuetify: new Vuetify()
+      vuetify: new Vuetify(),
+      notFound: false,
     }
   },
   methods: {
+    buscarPelicula() {
+      window.location.href = `/contenido/${this.busqueda}`;
+    },
     guardarContenido() {
       this.userLikes = !this.userLikes;
       axios.post(`${process.env.VUE_APP_BACK_URL}/api/v1/user/films`, {
@@ -98,15 +106,26 @@ export default {
       var titulo = window.location.href.split("/")[4].replace(/%20/g, " ");
       axios.get(`${process.env.VUE_APP_BACK_URL}/api/v1/film/${titulo}`)
       .then(response => {
-        this.titulo = response.data.Title;
-        this.generos = response.data.Genre;
-        this.duracion = response.data.Runtime;
-        this.imagen = response.data.Poster;
-        this.descripcion = response.data.Plot;
-        this.valoracion = response.data.imdbRating*10;
-        this.actores = response.data.Actors;
+        if (response.data.message) {
+          this.titulo = response.data.film.Title;
+          this.generos = response.data.film.Genre;
+          this.duracion = response.data.film.Runtime;
+          this.imagen = response.data.film.Poster;
+          this.descripcion = response.data.film.Plot;
+          this.valoracion = response.data.film.imdbRating*10;
+          this.actores = response.data.film.Actors;
+        } else {
+          this.titulo = response.data.Title;
+          this.generos = response.data.Genre;
+          this.duracion = response.data.Runtime;
+          this.imagen = response.data.Poster;
+          this.descripcion = response.data.Plot;
+          this.valoracion = response.data.imdbRating*10;
+          this.actores = response.data.Actors;
+        }
       })
       .catch(error => {
+        this.notFound = true;
         console.log(error);
       });
     },

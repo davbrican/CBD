@@ -19,7 +19,7 @@
                 </li>
             </ul>
             <input v-model="busqueda" class="form-control mr-sm-1" type="search" placeholder="Search" aria-label="Search">
-            <button @click="buscarPelicula" class="btn btn-outline-success my-2 my-sm-0" type="submit">Buscar</button>
+            <button @click="buscarPelicula()" class="btn btn-outline-success my-2 my-sm-0" type="submit">Buscar</button>
         </div>
     </nav>
 
@@ -69,7 +69,7 @@ export default {
         });
     },
     buscarPelicula() {
-        console.log(this.busqueda);
+      window.location.href = `/contenido/${this.busqueda}`;
     },
     logout() {
         localStorage.removeItem('user');

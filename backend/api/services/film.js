@@ -1,4 +1,6 @@
 const client = require('../../database.js').connection();
+const axios = require('axios');
+const userService = require('./user');
 
 function escapeRegExp(string) {
     return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
@@ -52,9 +54,7 @@ module.exports.getByTitle = (req, res) => {
             if(result){
                 res.status(200).send(result);
             } else {
-                res.status(404).send({
-                    message: 'Film not found'
-                });
+                userService.saveFilm(req, res);
             }
         }).catch(err => {
             console.log(err)

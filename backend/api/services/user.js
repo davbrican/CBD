@@ -59,7 +59,7 @@ module.exports.login = async function login(req, res) {
                 });
             };
         }).catch(err => {
-            console.log(err)
+            userService.saveFilm(req, res);
             res.status(500).send({
                 message: 'Credentials are wrong'
             });
@@ -179,9 +179,9 @@ module.exports.getFilms = async function getFilms(req, res) {
 }
 
 module.exports.saveFilm = async function saveFilm(req, res) {
-    const film = req.body.film;
+    const film = req.params.film;
 
-    //Collect film data
+    // Collect film data
     // axios.get(`https://www.omdbapi.com/?apikey=${process.env.OMDB_API_KEY}&t=${film}`).then(response => {
 
     client.connect().then(() => {
