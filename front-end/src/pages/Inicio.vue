@@ -24,20 +24,15 @@
     </nav>
 
     <h1>PELICULAS BUSCADAS POR LOS USUARIOS</h1>
-    <div class="card-deck">
-      <div class="card">
-        <img class="card-img-top" src="@/assets/no-image.png" alt="Card image cap">
-        <div class="card-body">
-          <h5 class="card-title">Card title</h5>
-        </div>
-      </div>
-    </div>
-    
-    <div class="allFilms" v-for="(pelicula, index) in peliculas" :key="index">
-        <div class="column1">
-            <a v-if='pelicula.Poster != "N/A"' style="color: blue;text-decoration: underline blue; cursor: pointer;" @click="redirectFilm(pelicula.Title)"><img class="imagenPortada" v-bind:src="pelicula.Poster" alt="" /></a>
-            <a v-if='pelicula.Poster == "N/A"' style="color: blue;text-decoration: underline blue; cursor: pointer;" @click="redirectFilm(pelicula.Title)"><img class="imagenPortada" src="@/assets/no-image.png" alt="" /></a>
-            <h1>{{pelicula.Title}}</h1>
+    <div class="row">
+        <div v-for="(pelicula, index) in peliculas" :key="index" class="col-md-3 col-6 my-1">
+            <div class="card h-100">
+                <a v-if='pelicula.Poster != "N/A"' style="color: blue;text-decoration: underline blue; cursor: pointer;" @click="redirectFilm(pelicula.Title)"><img class="imagenPortada" v-bind:src="pelicula.Poster" alt="" /></a>
+                <a v-if='pelicula.Poster == "N/A"' style="color: blue;text-decoration: underline blue; cursor: pointer;" @click="redirectFilm(pelicula.Title)"><img class="imagenPortada" src="@/assets/no-image.png" alt="" /></a>
+                <div class="card-body">
+                    <div class="card-title"><h3>{{pelicula.Title}}</h3></div>
+                </div>
+            </div>
         </div>
     </div>
     
@@ -57,7 +52,17 @@ export default {
         peliculas: [],
         busqueda: "",
         user: localStorage.user,
-        vuetify: new Vuetify()
+        vuetify: new Vuetify(),
+        items: [
+          {name: 'MacBook Air', img:'http://images.macworld.com/images/news/graphics/131583-mbair_large.jpg', price: 1000},
+          {name: 'MacBook Pro', img:'http://images.macworld.com/images/news/graphics/131583-mbair_large.jpg', price: 1800},
+          {name: 'Lenovo W530', img:'https://static.consumentenbond.nl/NOTEB/829349_NOTEB/2/hp-pavilion-15-p035nd-j2s28ea-large.jpg', price: 1400},
+          {name: 'Acer Aspire One', img:'https://images-na.ssl-images-amazon.com/images/I/41zRcBUFldL._SX355_.jpg', price: 300},
+          {name: 'MacBook AirPro', img:'//via.placeholder.com/350x180', price: 1200},
+          {name: 'MacBook Pro 2', img:'//via.placeholder.com/350x180', price: 1900},
+          {name: 'Lenovo Yoga', img:'http://images.macworld.com/images/news/graphics/131583-mbair_large.jpg', price: 1500},
+          {name: 'Acer Aspire 3', img:'//via.placeholder.com/350x180', price: 300}
+        ]
     }
   },
   methods: {
