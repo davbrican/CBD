@@ -24,7 +24,15 @@
     </nav>
 
     <h1>PELICULAS BUSCADAS POR LOS USUARIOS</h1>
-
+    <div class="card-deck">
+      <div class="card">
+        <img class="card-img-top" src="@/assets/no-image.png" alt="Card image cap">
+        <div class="card-body">
+          <h5 class="card-title">Card title</h5>
+        </div>
+      </div>
+    </div>
+    
     <div class="allFilms" v-for="(pelicula, index) in peliculas" :key="index">
         <div class="column1">
             <a v-if='pelicula.Poster != "N/A"' style="color: blue;text-decoration: underline blue; cursor: pointer;" @click="redirectFilm(pelicula.Title)"><img class="imagenPortada" v-bind:src="pelicula.Poster" alt="" /></a>
@@ -32,7 +40,7 @@
             <h1>{{pelicula.Title}}</h1>
         </div>
     </div>
-
+    
   </div>
 </template>
 

@@ -57,6 +57,7 @@
     <div v-if="notFound">
       <h1>Pelicula no encontrada</h1>
     </div>
+    
   </div>
 </template>
 
