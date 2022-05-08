@@ -63,7 +63,9 @@ export default {
         axios.get(`${process.env.VUE_APP_BACK_URL}/api/v1/film/all`)
         .then(response => {
             if (response.status == 200) {
-                this.peliculas = response.data;
+                this.peliculas = response.data.sort((a, b) => {
+                  return a.Title.localeCompare(b.Title);
+                });
             }
         }).catch(error => {
             console.log(error);

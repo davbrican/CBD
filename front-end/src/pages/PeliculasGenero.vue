@@ -61,10 +61,10 @@ export default {
         axios.get(`${process.env.VUE_APP_BACK_URL}/api/v1/film/genre?genre=${genero}`)
         .then(response => {
             if (response.status == 200) {
-                this.peliculas = response.data;
-                console.log(this.peliculas);
+                this.peliculas = response.data.sort((a, b) => {
+                  return a.Title.localeCompare(b.Title);
+                });
             }
-            console.log(response);
         }).catch(error => {
             console.log(error);
         });

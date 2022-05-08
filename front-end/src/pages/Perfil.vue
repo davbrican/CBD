@@ -68,6 +68,9 @@ export default {
                 const element = lista[i];
                 this.peliculas.push(element);
             }
+            this.peliculas = this.peliculas.sort((a, b) => {
+              return a.Title.localeCompare(b.Title);
+            });
         }).catch(error => {
             console.log(error);
         });
