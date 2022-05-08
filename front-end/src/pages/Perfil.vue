@@ -23,8 +23,10 @@
         </div>
     </nav>
 
-    <h1>TUS PELICULAS FAVORITAS</h1>
-    <div class="row">
+    <h1>YOUR FAVOURITE FILMS / TV SERIES</h1>
+    <pre>Filter by genre:<select id="choosenGenre"><option value="" selected disabled hidden>Choose genre</option><option v-for="category in setCategories" :key="category" :value="category" @click="filterByGenre()">{{category}}</option></select></pre>
+    <pre>Sort by: <select id="orderBy"><option value="" selected disabled hidden>Choose option...</option><option v-for="order in orderByList" :key="order" :value="order" @click="sortList()">{{order}}</option></select></pre>
+    <div class="row" v-if="loadedFilms">
         <div v-for="(pelicula, index) in peliculas" :key="index" class="col-md-3 col-6 my-1">
             <div class="card h-100">
                 <a v-if='pelicula.Poster != "N/A"' style="color: blue;text-decoration: underline blue; cursor: pointer;" @click="redirectFilm(pelicula.Title)"><img class="imagenPortada" v-bind:src="pelicula.Poster" alt="" /></a>
@@ -56,10 +58,37 @@ export default {
         user: localStorage.user,
         vuetify: new Vuetify(),
         setCategories: new Set(),
+        orderByList: ["Title ascendent", "Title descendent", "Rating ascendent", "Rating descendent"],
     }
   },
   methods: {
+    sortList() {
+      this.loadedFilms = false;
+      var orderBy = document.getElementById("orderBy").value;
+      if(orderBy == "Title ascendent") {
+        this.peliculas.sort(function(a, b) {
+            return a.Title.localeCompare(b.Title);
+        });
+      }
+      else if(orderBy == "Title descendent") {
+        this.peliculas.sort(function(a, b) {
+            return b.Title.localeCompare(a.Title);
+        });
+      }
+      else if(orderBy == "Rating ascendent") {
+        this.peliculas.sort(function(a, b) {
+            return a.imdbRating.localeCompare(b.imdbRating);
+        });
+      }
+      else if(orderBy == "Rating descendent") {
+        this.peliculas.sort(function(a, b) {
+            return b.imdbRating.localeCompare(a.imdbRating);
+        });
+      }
+      this.loadedFilms = true;
+    },
     filterByGenre() {
+      this.categoriaSeleccionada = document.getElementById("choosenGenre").value;
       if (this.categoriaSeleccionada[0] == " ") this.categoriaSeleccionada = this.categoriaSeleccionada.substring(1, this.categoriaSeleccionada.length);
       window.location.href = `/contenido/genero/${this.categoriaSeleccionada}`;
     },

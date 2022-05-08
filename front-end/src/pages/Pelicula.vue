@@ -38,7 +38,7 @@
         </div>
         <br>
         <p><strong>Duration:</strong> {{duracion}}</p>
-        <p><strong>Valoration:</strong></p>
+        <p><strong>Rating:</strong></p>
         <v-progress-circular
           :rotate="360"
           :size="50"
