@@ -2,7 +2,7 @@
   <div id="Pelicula" >
      
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <a class="navbar-brand" href="/">Inicio</a>
+        <a class="navbar-brand" href="/">Home</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
@@ -10,17 +10,17 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav mr-auto">
                 <li v-if="!user" class="nav-item">
-                    <a class="nav-link" href="/login">Iniciar Sesión</a>
+                    <a class="nav-link" href="/login">Log in</a>
                 </li>
                 <li v-if="user" class="nav-item">
-                    <a class="nav-link" href="/perfil">Perfil</a>
+                    <a class="nav-link" href="/perfil">Profile</a>
                 </li>
                 <li v-if="user" class="nav-item">
-                    <a @click="logout" class="nav-link" href="/">Cerrar Sesion</a>
+                    <a @click="logout" class="nav-link" href="/">Log out</a>
                 </li>
             </ul>
             <input v-model="busqueda" class="form-control mr-sm-1" type="search" placeholder="Search" aria-label="Search">
-            <button @click="buscarPelicula()" class="btn btn-outline-success my-2 my-sm-0" type="submit">Buscar</button>
+            <button @click="buscarPelicula()" class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
         </div>
     </nav>
 
@@ -32,13 +32,13 @@
       
         <h1>{{titulo}} <button @click="guardarContenido" v-if="user && !userLikes"><img src="@/assets/emptyHeart.svg" style="width: 20px;" /></button><button @click="guardarContenido" v-if="user && userLikes"><img src="@/assets/filledHeart.svg" style="width: 20px;" /></button></h1>
         
-        <strong>Géneros:</strong> 
+        <strong>Genres:</strong> 
         <div v-for="genero in generos.split(',')" :key="genero">
           <a style="color: blue;text-decoration: underline blue; cursor: pointer;" @click="redirectGenre(genero)">{{genero}}</a>
         </div>
         <br>
-        <p><strong>Duración:</strong> {{duracion}}</p>
-        <p><strong>Valoración media:</strong></p>
+        <p><strong>Duration:</strong> {{duracion}}</p>
+        <p><strong>Valoration:</strong></p>
         <v-progress-circular
           :rotate="360"
           :size="50"
@@ -50,12 +50,12 @@
         </v-progress-circular>
         <br>
         <br>
-        <p><strong>Descripción:</strong><br>{{descripcion}}</p>
-        <p><strong>Actores:</strong><br>{{actores}}</p>
+        <p><strong>Description:</strong><br>{{descripcion}}</p>
+        <p><strong>Actors:</strong><br>{{actores}}</p>
     </div>
 
     <div v-if="notFound">
-      <h1>Pelicula no encontrada</h1>
+      <h1>Film not found</h1>
     </div>
     
   </div>

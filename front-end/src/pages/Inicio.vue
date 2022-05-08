@@ -1,7 +1,7 @@
 <template>
   <div id="Inicio">  
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <a class="navbar-brand" href="/">Inicio</a>
+        <a class="navbar-brand" href="/">Home</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
@@ -9,21 +9,23 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav mr-auto">
                 <li v-if="!user" class="nav-item">
-                    <a class="nav-link" href="/login">Iniciar Sesión</a>
+                    <a class="nav-link" href="/login">Log in</a>
                 </li>
                 <li v-if="user" class="nav-item">
-                    <a class="nav-link" href="/perfil">Perfil</a>
+                    <a class="nav-link" href="/perfil">Profile</a>
                 </li>
                 <li v-if="user" class="nav-item">
-                    <a @click="logout" class="nav-link" href="/">Cerrar Sesion</a>
+                    <a @click="logout" class="nav-link" href="/">Log out</a>
                 </li>
             </ul>
             <input v-model="busqueda" class="form-control mr-sm-1" type="search" placeholder="Search" aria-label="Search">
-            <button @click="buscarPelicula()" class="btn btn-outline-success my-2 my-sm-0" type="submit">Buscar</button>
+            <button @click="buscarPelicula()" class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
         </div>
     </nav>
 
-    <h1>PELICULAS BUSCADAS POR LOS USUARIOS</h1>
+
+    <pre>Filter by genre:<select v-model="categoriaSeleccionada"><option v-for="category in setCategories" :key="category" :value="category" @click="filterByGenre()">{{category}}</option></select></pre>
+    <h1>FILMS SEARCHED BY USERS</h1>
     <div class="row">
         <div v-for="(pelicula, index) in peliculas" :key="index" class="col-md-3 col-6 my-1">
             <div class="card h-100">
@@ -53,19 +55,15 @@ export default {
         busqueda: "",
         user: localStorage.user,
         vuetify: new Vuetify(),
-        items: [
-          {name: 'MacBook Air', img:'http://images.macworld.com/images/news/graphics/131583-mbair_large.jpg', price: 1000},
-          {name: 'MacBook Pro', img:'http://images.macworld.com/images/news/graphics/131583-mbair_large.jpg', price: 1800},
-          {name: 'Lenovo W530', img:'https://static.consumentenbond.nl/NOTEB/829349_NOTEB/2/hp-pavilion-15-p035nd-j2s28ea-large.jpg', price: 1400},
-          {name: 'Acer Aspire One', img:'https://images-na.ssl-images-amazon.com/images/I/41zRcBUFldL._SX355_.jpg', price: 300},
-          {name: 'MacBook AirPro', img:'//via.placeholder.com/350x180', price: 1200},
-          {name: 'MacBook Pro 2', img:'//via.placeholder.com/350x180', price: 1900},
-          {name: 'Lenovo Yoga', img:'http://images.macworld.com/images/news/graphics/131583-mbair_large.jpg', price: 1500},
-          {name: 'Acer Aspire 3', img:'//via.placeholder.com/350x180', price: 300}
-        ]
+        setCategories: new Set(),
+        categoriaSeleccionada: 'All',
     }
   },
   methods: {
+    filterByGenre() {
+      if (this.categoriaSeleccionada[0] == " ") this.categoriaSeleccionada = this.categoriaSeleccionada.substring(1, this.categoriaSeleccionada.length);
+      window.location.href = `/contenido/genero/${this.categoriaSeleccionada}`;
+    },
     buscarPelicula() {
       window.location.href = `/contenido/${this.busqueda}`;
     },
@@ -78,6 +76,11 @@ export default {
             if (response.status == 200) {
                 this.peliculas = response.data.sort((a, b) => {
                   return a.Title.localeCompare(b.Title);
+                });
+                this.peliculas.forEach(element => {
+                  element.Genre.split(",").forEach(genre => {
+                    this.setCategories.add(genre);
+                  });
                 });
             }
         }).catch(error => {

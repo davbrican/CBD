@@ -1,7 +1,7 @@
 <template>
   <div id="Inicio">  
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <a class="navbar-brand" href="/">Inicio</a>
+        <a class="navbar-brand" href="/">Home</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
@@ -9,17 +9,17 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav mr-auto">
                 <li v-if="!user" class="nav-item">
-                    <a class="nav-link" href="/login">Iniciar Sesión</a>
+                    <a class="nav-link" href="/login">Log in</a>
                 </li>
                 <li v-if="user" class="nav-item">
-                    <a class="nav-link" href="/perfil">Perfil</a>
+                    <a class="nav-link" href="/perfil">Profile</a>
                 </li>
                 <li v-if="user" class="nav-item">
-                    <a @click="logout" class="nav-link" href="/">Cerrar Sesion</a>
+                    <a @click="logout" class="nav-link" href="/">Log out</a>
                 </li>
             </ul>
             <input v-model="busqueda" class="form-control mr-sm-1" type="search" placeholder="Search" aria-label="Search">
-            <button @click="buscarPelicula()" class="btn btn-outline-success my-2 my-sm-0" type="submit">Buscar</button>
+            <button @click="buscarPelicula()" class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
         </div>
     </nav>
 
@@ -35,6 +35,8 @@
             </div>
         </div>
     </div>
+
+    
 
   </div>
 </template>
@@ -52,10 +54,15 @@ export default {
         peliculas: [],
         busqueda: "",
         user: localStorage.user,
-        vuetify: new Vuetify()
+        vuetify: new Vuetify(),
+        setCategories: new Set(),
     }
   },
   methods: {
+    filterByGenre() {
+      if (this.categoriaSeleccionada[0] == " ") this.categoriaSeleccionada = this.categoriaSeleccionada.substring(1, this.categoriaSeleccionada.length);
+      window.location.href = `/contenido/genero/${this.categoriaSeleccionada}`;
+    },
     buscarPelicula() {
       window.location.href = `/contenido/${this.busqueda}`;
     },
@@ -70,6 +77,9 @@ export default {
             for (let i = 0; i < lista.length; i++) {
                 const element = lista[i];
                 this.peliculas.push(element);
+                element.Genre.split(",").forEach(genre => {
+                  this.setCategories.add(genre);
+                });
             }
             this.peliculas = this.peliculas.sort((a, b) => {
               return a.Title.localeCompare(b.Title);

@@ -1,7 +1,7 @@
 <template>
   <div id="Inicio">  
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <a class="navbar-brand" href="/">Inicio</a>
+        <a class="navbar-brand" href="/">Home</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
@@ -9,21 +9,22 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav mr-auto">
                 <li v-if="!user" class="nav-item">
-                    <a class="nav-link" href="/login">Iniciar Sesión</a>
+                    <a class="nav-link" href="/login">Log in</a>
                 </li>
                 <li v-if="user" class="nav-item">
-                    <a class="nav-link" href="/perfil">Perfil</a>
+                    <a class="nav-link" href="/perfil">Profile</a>
                 </li>
                 <li v-if="user" class="nav-item">
-                    <a @click="logout" class="nav-link" href="/">Cerrar Sesion</a>
+                    <a @click="logout" class="nav-link" href="/">Log out</a>
                 </li>
             </ul>
             <input v-model="busqueda" class="form-control mr-sm-1" type="search" placeholder="Search" aria-label="Search">
-            <button @click="buscarPelicula()" class="btn btn-outline-success my-2 my-sm-0" type="submit">Buscar</button>
+            <button @click="buscarPelicula()" class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
         </div>
     </nav>
 
-    <h1>PELICULAS BUSCADAS POR LOS USUARIOS</h1>
+    <pre>Filter by genre:<select v-model="categoriaSeleccionada"><option v-for="category in setCategories" :key="category" :value="category" @click="filterByGenre()">{{category}}</option></select></pre>
+    <h1>FILMS SEARCHED BY USERS</h1>
     <div class="row">
         <div v-for="(pelicula, index) in peliculas" :key="index" class="col-md-3 col-6 my-1">
             <div class="card h-100">
@@ -52,10 +53,15 @@ export default {
         peliculas: [],
         busqueda: "",
         user: localStorage.user,
-        vuetify: new Vuetify()
+        vuetify: new Vuetify(),
+        setCategories: new Set(),
     }
   },
   methods: {
+    filterByGenre() {
+      if (this.categoriaSeleccionada[0] == " ") this.categoriaSeleccionada = this.categoriaSeleccionada.substring(1, this.categoriaSeleccionada.length);
+      window.location.href = `/contenido/genero/${this.categoriaSeleccionada}`;
+    },
     redirectFilm(title) {
         window.location.href = `/contenido/${title}`;
     },
@@ -66,6 +72,11 @@ export default {
             if (response.status == 200) {
                 this.peliculas = response.data.sort((a, b) => {
                   return a.Title.localeCompare(b.Title);
+                });
+                this.peliculas.forEach(element => {
+                  element.Genre.split(",").forEach(genre => {
+                    this.setCategories.add(genre);
+                  });
                 });
             }
         }).catch(error => {
