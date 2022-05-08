@@ -27,7 +27,8 @@
 
     <div class="allFilms" v-for="(pelicula, index) in peliculas" :key="index">
         <div class="column1">
-            <a style="color: blue;text-decoration: underline blue; cursor: pointer;" @click="redirectFilm(pelicula.Title)"><img class="imagenPortada" v-bind:src="pelicula.Poster" alt="" /></a>
+            <a v-if='pelicula.Poster != "N/A"' style="color: blue;text-decoration: underline blue; cursor: pointer;" @click="redirectFilm(pelicula.Title)"><img class="imagenPortada" v-bind:src="pelicula.Poster" alt="" /></a>
+            <a v-if='pelicula.Poster == "N/A"' style="color: blue;text-decoration: underline blue; cursor: pointer;" @click="redirectFilm(pelicula.Title)"><img class="imagenPortada" src="@/assets/no-image.png" alt="" /></a>
             <h1>{{pelicula.Title}}</h1>
         </div>
     </div>
@@ -55,7 +56,7 @@ export default {
     redirectFilm(title) {
         window.location.href = `/contenido/${title}`;
     },
-    obetenerPeliculas() {
+    obtenerPeliculas() {
         var genero = window.location.href.split("/")[5];
         axios.get(`${process.env.VUE_APP_BACK_URL}/api/v1/film/genre?genre=${genero}`)
         .then(response => {
@@ -76,7 +77,7 @@ export default {
     }
   },
   mounted() {
-      this.obetenerPeliculas();
+      this.obtenerPeliculas();
   }
 };
 </script>

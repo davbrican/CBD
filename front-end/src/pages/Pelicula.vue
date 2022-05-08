@@ -25,7 +25,8 @@
     </nav>
 
     <div class="column3" v-if="!notFound">
-        <img class="imagenPortada" v-bind:src="imagen" alt="" />
+        <img v-if='imagen != "N/A"' class="imagenPortada" v-bind:src="imagen" alt="" />
+        <img v-if='imagen == "N/A"' class="imagenPortada" src="@/assets/no-image.png" alt="" />
     </div>
     <div class="column4" v-if="!notFound">
       
@@ -113,13 +114,13 @@ export default {
           const element = lista[i];
           this.likedFilms.push(element.Title);
         }
-        this.obetenerPelicula();
+        this.obtenerPeliculas();
       }).catch((err) => {
         console.log(err);
-        this.obetenerPelicula();
+        this.obtenerPeliculas();
       });
     },
-    obetenerPelicula() {
+    obtenerPeliculas() {
       var titulo = window.location.href.split("/")[4].replace(/%20/g, " ");
       axios.get(`${process.env.VUE_APP_BACK_URL}/api/v1/film/${titulo}`)
       .then(response => {
