@@ -147,8 +147,6 @@ module.exports.getFilms = async function getFilms(req, res) {
             message: 'No credentials provided.'
         });
     } else {
-        const userId = '6271558b57553e2bfa2bc070';
-
         client.connect().then(() => {
             //join films and users by film title
             client.db("cbd").collection("users").aggregate([
