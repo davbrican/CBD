@@ -10,6 +10,14 @@ export default {};
 
 <style>
 
+body{
+  background-color: #f8f9fa;
+}
+
+button{
+  color: #f8f9fa!important;
+}
+
 /* For mobile phones: */
 [class*="col-"] {
   width: 100%;

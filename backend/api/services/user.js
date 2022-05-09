@@ -105,6 +105,7 @@ module.exports.signup = async function signup(req, res) {
             const user = {
                 email: email,
                 password: hash,
+                films: []
             }
 
             client.connect().then(() => {
@@ -185,9 +186,6 @@ module.exports.getFilms = async function getFilms(req, res) {
 
 module.exports.saveFilm = async function saveFilm(req, res) {
     const film = req.params.film;
-
-    // Collect film data
-    // axios.get(`https://www.omdbapi.com/?apikey=${process.env.OMDB_API_KEY}&t=${film}`).then(response => {
 
     client.connect().then(() => {
         client.db("cbd").collection("films").findOne({ 'Title': film }).then((result) => {

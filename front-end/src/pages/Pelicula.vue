@@ -1,7 +1,7 @@
 <template>
   <div id="Pelicula" >
      
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
         <a class="navbar-brand" href="/">Home</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
@@ -10,17 +10,17 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav mr-auto">
                 <li v-if="!user" class="nav-item">
-                    <a class="nav-link" href="/login">Log in</a>
+                    <a class="nav-link" href="/login">Login</a>
                 </li>
                 <li v-if="user" class="nav-item">
                     <a class="nav-link" href="/perfil">Profile</a>
                 </li>
                 <li v-if="user" class="nav-item">
-                    <a @click="logout" class="nav-link" href="/">Log out</a>
+                    <a @click="logout" class="nav-link" href="/">Logout</a>
                 </li>
             </ul>
             <input v-model="busqueda" class="form-control mr-sm-1" type="search" placeholder="Search" aria-label="Search">
-            <button @click="buscarPelicula()" class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+            <button @click="buscarPelicula()" class="btn btn-outline-light my-2 my-sm-0" type="submit">Search</button>
         </div>
     </nav>
 
