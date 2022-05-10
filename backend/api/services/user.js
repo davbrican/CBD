@@ -165,8 +165,9 @@ module.exports.getFilms = async function getFilms(req, res) {
                     }
                 }
             ]).toArray().then((result) => {
+                result = result.filter(x => x.films.length > 0);
                 res.status(200).send({
-                    films: result
+                    films: result[0]
                 });
             }).catch(err => {
                 console.log(err)

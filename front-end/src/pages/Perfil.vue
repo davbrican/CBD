@@ -70,6 +70,7 @@ export default {
         vuetify: new Vuetify(),
         setCategories: new Set(),
         orderByList: ["Title ascendent", "Title descendent", "Rating ascendent", "Rating descendent"],
+        loadedFilms: true,
     }
   },
   methods: {
@@ -113,11 +114,11 @@ export default {
         axios.get(`${process.env.VUE_APP_BACK_URL}/api/v1/user/films`, {headers: {
             "x-access-user": localStorage.user
         }}).then(response => {
-          console.log(response)
-            var lista = response.data.films[0].films;
+            var lista = response.data.films.films;
+
             for (let i = 0; i < lista.length; i++) {
                 const element = lista[i];
-                this.peliculas.push(element);
+                this.peliculas[i] = element;
                 element.Genre.split(",").forEach(genre => {
                   this.setCategories.add(genre);
                 });

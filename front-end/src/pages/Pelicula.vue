@@ -97,7 +97,7 @@ export default {
       }, 
       {
         headers: {
-          "x-access-token": localStorage.user
+          "x-access-user": localStorage.user
         }
       }).then(response => {
         console.log(response);
@@ -107,13 +107,13 @@ export default {
     },
     start() {
       axios.get(`${process.env.VUE_APP_BACK_URL}/api/v1/user/films`, {headers: {
-        "x-access-token": localStorage.user
+        "x-access-user": localStorage.user
       }}).then(response => {
         console.log(response);
-        var lista = response.data.films[0].films;
+        var lista = response.data.films.films;
         for (let i = 0; i < lista.length; i++) {
           const element = lista[i];
-          this.likedFilms.push(element.Title);
+          this.likedFilms[i] = element.Title;
         }
         this.obtenerPeliculas();
       }).catch((err) => {
