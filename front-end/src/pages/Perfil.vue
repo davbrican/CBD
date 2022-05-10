@@ -111,7 +111,7 @@ export default {
     },
     obtenerPeliculas() {
         axios.get(`${process.env.VUE_APP_BACK_URL}/api/v1/user/films`, {headers: {
-            "x-access-token": localStorage.user
+            "x-access-user": localStorage.user
         }}).then(response => {
           console.log(response)
             var lista = response.data.films[0].films;

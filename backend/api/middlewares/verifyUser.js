@@ -5,7 +5,7 @@ const bcrypt = require('bcrypt');
 dotenv.config({ path: process.cwd() + './../.env' })
 
 module.exports = (req, res, next) => {
-    const credentials = req.headers['x-access-token']
+    const credentials = req.headers['x-access-user']
     if (!credentials) {
         res.status(401).send({ message: 'No credentials provided' })
     }
