@@ -54,7 +54,7 @@
         <p><strong>Actors:</strong><br>{{actores}}</p>
     </div>
 
-    <div v-if="notFound">
+    <div v-if="notFound" class="d-flex justify-content-center p-3">
       <h1>Film not found</h1>
     </div>
     
