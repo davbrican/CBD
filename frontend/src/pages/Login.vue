@@ -74,7 +74,8 @@ export default {
         console.log(response);
       })
       .catch(function (error) {
-          console.log(error);
+        console.log(error);
+        window.alert(error.response.data.message);
       });
     }
   },
