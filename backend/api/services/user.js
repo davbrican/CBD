@@ -157,11 +157,6 @@ module.exports.getFilms = async function getFilms(req, res) {
                         localField: "films",
                         foreignField: "Title",
                         as: "films",
-                        let: { "userId": "$_id" },
-                        pipeline: [
-                            { "$addFields": { "userId": { "$toObjectId": ObjectId(req.verifiedUserID) } } },
-                            { "$match": { "$expr": { "$eq": [ "$userId", "$$userId" ] } } }
-                        ],
                     }
                 }
             ]).toArray().then((result) => {
