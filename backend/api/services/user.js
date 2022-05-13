@@ -55,7 +55,7 @@ module.exports.login = async function login(req, res) {
                 });
             } else {
                 res.status(409).send({
-                    message: 'User already exists'
+                    message: 'Credentials are wrong'
                 });
             };
         }).catch(err => {
@@ -157,10 +157,19 @@ module.exports.getFilms = async function getFilms(req, res) {
                         localField: "films",
                         foreignField: "Title",
                         as: "films",
+                        let: { "userId": "$_id" },
+                        pipeline: [
+                            { "$addFields": { "userId": { "$toObjectId": ObjectId(req.verifiedUserID) } } },
+                            { "$match": { "$expr": { "$eq": [ "$userId", "$$userId" ] } } }
+                        ],
                     }
-                }
+                },
+                {
+                    $match: {
+                        "_id": ObjectId(req.verifiedUserID)
+                    }
+                }  
             ]).toArray().then((result) => {
-                result = result.filter(x => x.films.length > 0);
                 res.status(200).send({
                     films: result[0]
                 });
