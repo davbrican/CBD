@@ -47,7 +47,7 @@ module.exports.login = async function login(req, res) {
                         if (result2) {
                             res.status(200).send({ user, message: 'Logged in!' });
                         } else {
-                            res.status(401).send({
+                            res.status(409).send({
                                 message: 'Credentials are wrong'
                             });
                         }
