@@ -14,4 +14,4 @@ app.use('/api/v1', router);
 app.listen(process.env.EXPRESS_PORT, function() {
     console.log("App running at http://localhost:" + process.env.EXPRESS_PORT);
     console.log("________________________________________________________________");
-  });
+});
